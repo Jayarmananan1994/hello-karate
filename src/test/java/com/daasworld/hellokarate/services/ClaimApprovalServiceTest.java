@@ -1,5 +1,6 @@
 package com.daasworld.hellokarate.services;
 
+import com.daasworld.hellokarate.entities.ClaimRequest;
 import com.daasworld.hellokarate.entities.Person;
 import com.intuit.karate.netty.FeatureServer;
 import org.junit.BeforeClass;
@@ -23,8 +24,23 @@ public class ClaimApprovalServiceTest {
     }
 
     @Test
-    public void GivenValifRequestIfShouldReturnClaimStatus(){
+    public void GivenValidfRequestGetApprovalStatusShouldReturnClaimStatus(){
         String response = claimApprovalService.getRequestApprovalStatus("CLAI100");
         assertEquals("Should return Approved Message","Approved", response);
+    }
+
+    @Test
+    public void GivenValidRequestAddClaimRequestShouldAddClaimRequest(){
+        ClaimRequest claimRequest = new ClaimRequest("Valid cliam","Some tyoe",1000);
+        String response = claimApprovalService.addClaimRequest(claimRequest);
+        assertEquals("Should return Created Claim Message","{\"name\":\"Valid cliam\",\"additionalNotes\":\"Some tyoe\",\"amount\":1000.0}", response);
+    }
+
+    @Test
+    public void GivenValidRequestGetClaimRequestShouldAddClaimRequest(){
+        ClaimRequest claimRequest = new ClaimRequest("Valid cliam","Some tyoe",1000);
+        claimApprovalService.addClaimRequest(claimRequest);
+        String response = claimApprovalService.getClaimRequest("1");
+        assertEquals("Should return Created Claim Message","{\"name\":\"Valid cliam\",\"additionalNotes\":\"Some tyoe\",\"amount\":1000.0}", response);
     }
 }

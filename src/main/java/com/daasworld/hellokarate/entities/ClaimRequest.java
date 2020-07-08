@@ -6,7 +6,6 @@ public class ClaimRequest {
     String name;
     String additionalNotes;
     double amount;
-    List<String> attachmentUrls;
 
     public ClaimRequest(){}
     public ClaimRequest(String name,String  additionalNotes,double amount){

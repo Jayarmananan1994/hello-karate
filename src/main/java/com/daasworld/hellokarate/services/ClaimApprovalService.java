@@ -1,5 +1,6 @@
 package com.daasworld.hellokarate.services;
 
+import com.daasworld.hellokarate.entities.ClaimRequest;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import java.net.URL;
 
 //@Service
 public class ClaimApprovalService {
-    private static String sigimUrl = "http://127.0.0.1:9000/claim-status";
+    private static String sigimUrl = "http://127.0.0.1:9000";
     private RestTemplate restTemplate;
 
    // @Autowired
@@ -20,33 +21,18 @@ public class ClaimApprovalService {
     }
 
     public String getRequestApprovalStatus(String requestId){
-        ResponseEntity<String> serviceResponse =  restTemplate.getForEntity(sigimUrl+"/"+requestId, String.class);
+        ResponseEntity<String> serviceResponse =  restTemplate.getForEntity(sigimUrl+"/claim-status/"+requestId, String.class);
         return serviceResponse.getBody();
     }
 
-    public String create() {
-        try {
-            HttpURLConnection con = getConnection();
-            con.setRequestMethod("GET");
-            con.setDoOutput(true);
-            con.setRequestProperty("Content-Type", "application/json");
-
-
-            int status = con.getResponseCode();
-            if (status != 200) {
-                throw new RuntimeException("status code was " + status);
-            }
-            String content = IOUtils.toString(con.getInputStream(), "utf-8");
-            return content;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+    public String addClaimRequest(ClaimRequest requestBody){
+        ResponseEntity<String> serviceResponse =  restTemplate.postForEntity(sigimUrl+"/add-claim/", requestBody, String.class);
+        return serviceResponse.getBody();
     }
 
-    private HttpURLConnection getConnection() throws Exception {
-        URL url = new URL(sigimUrl);
-
-            return (HttpURLConnection) url.openConnection();
+    public String getClaimRequest(String requestId){
+        ResponseEntity<String> serviceResponse =  restTemplate.getForEntity(sigimUrl+"/claim/"+requestId, String.class);
+        return serviceResponse.getBody();
     }
+
 }
